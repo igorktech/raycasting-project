@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="0" rowspan="2">
+     <widget class="DrawGame" name="widget" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>512</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="DrawMap" name="widget_2" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>160</width>
+        <height>160</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>160</width>
+        <height>160</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>160</width>
+        <height>160</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DrawGame</class>
+   <extends>QWidget</extends>
+   <header>drawgame.h</header>
+   <container>1</container>
+   <slots>
+    <signal>sendFps(QString)</signal>
+    <signal>sendRepaintMap(Map*)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>DrawMap</class>
+   <extends>QWidget</extends>
+   <header>drawmap.h</header>
+   <container>1</container>
+   <slots>
+    <slot>rePaint(Map*)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>widget</sender>
+   <signal>sendFps(QString)</signal>
+   <receiver>menubar</receiver>
+   <slot>setWindowTitle(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>140</x>
+     <y>129</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>173</x>
+     <y>12</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widget</sender>
+   <signal>sendFps(QString)</signal>
+   <receiver>statusbar</receiver>
+   <slot>showMessage(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>176</x>
+     <y>504</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>171</x>
+     <y>582</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widget</sender>
+   <signal>sendRepaintMap(Map*)</signal>
+   <receiver>widget_2</receiver>
+   <slot>rePaint(Map*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>603</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>667</x>
+     <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
