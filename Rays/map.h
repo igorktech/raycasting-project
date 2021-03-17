@@ -8,24 +8,23 @@
 #include <QEvent>
 #include <QPointF>
 #include <QPainter>
+#include "player.h"
+
 #define FloorColor QColor(240,240,240)
 #define WallColor QColor(140,140,140)
+
 class Map
 {
-
-
-   constexpr static unsigned int  mapSize = 20;
-
-
-    const uint m_blockSize = 8;
-    QRect widgetSize;
+   const unsigned int  mapSize = 20;
+    Player* pl;
+    const int m_blockSize = 8;
     QVector<QVector<int>> m_map = {
            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
            { 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-           { 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1 },
+           { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1 },
            { 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1 },
            { 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1 },
-           { 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+           { 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
            { 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1 },
            { 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 },
            { 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1 },
@@ -44,15 +43,15 @@ class Map
 public:
 
     Map();
-    void setWSize(QRect rect);
+    ~Map();
+   void Rays();
+    Player* player(){
+        return pl;
+    }
      void paintMap(QPainter & painter);
-     uint blockSize();
-     int map(int x, int y){
-         return m_map[x][y];
-     }
-     QVector<QVector<int>>& pMap(){
-         return m_map;
-     }
+     int blockSize();
+     int map(int x, int y);
+     QVector<QVector<int>>& pMap();
 };
 
 #endif // MAP_H

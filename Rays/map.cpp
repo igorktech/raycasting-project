@@ -1,7 +1,19 @@
 #include "map.h"
-
 Map::Map()
 {
+
+    pl = new Player();
+    bool flag = 1;
+    while(flag){
+        int plX, plY;
+        qsrand(QTime::currentTime().msec());
+        plX = qrand()%(m_blockSize*mapSize);
+        plY = qrand()%(m_blockSize*mapSize);
+        if(map(int(plY/m_blockSize),int(plX/m_blockSize))==0){
+    pl->setPlayerPos(QPointF(plX,plY));
+    flag = 0;
+        }
+    }
 
 }
 
@@ -18,12 +30,117 @@ void Map::paintMap(QPainter & painter){
             }
         }
     }
+    pl->paintPlayer(painter);
 
 }
 
-void Map::setWSize(QRect rect){
-    widgetSize = rect;
-}
-uint Map::blockSize(){
+
+int Map::blockSize(){
     return m_blockSize;
+}
+int Map::map(int x, int y){
+    return m_map[x][y];
+}
+QVector<QVector<int>>& Map::pMap(){
+    return m_map;
+}
+void Map::Rays(){
+
+    qreal fov = M_PI/3.;
+    qreal rxV = 0,ryV = 0,dx = 0,dy = 0,rxH = 0,ryH = 0;
+    int column_height = 0;
+
+     for (int i=0; i<viewX; i++) {
+             qreal angle = pl->angle()-fov/2 + fov*i/float(viewX);
+             qreal dl = 0;
+
+             if(qCos(angle)<= -0.01){ //y
+                rxV =  (int(pl->playerPos().x()/blockSize()))*blockSize()-0.001;
+                ryV = (rxV-pl->playerPos().x())*tan(angle)+pl->playerPos().y();
+                dx = -blockSize();
+                dy = dx*tan(angle);
+             }
+             else if(qCos(angle)>= 0.01){
+                rxV = (int(pl->playerPos().x()/blockSize()))*blockSize()+blockSize();
+                ryV = (rxV-pl->playerPos().x())*tan(angle)+pl->playerPos().y();
+                dx = blockSize();
+                dy = dx*tan(angle);
+             }
+             else{
+                 rxV = (int(pl->playerPos().x()/blockSize()))*blockSize()+blockSize();
+                 ryV = (rxV-pl->playerPos().x())*tan(1.56)+pl->playerPos().y();
+                 dx = blockSize();
+                 dy = dx*tan(1.56);
+             }
+
+             while(dl <20){
+                 if((rxV >= blockSize() && rxV <20*blockSize())&&(ryV >= blockSize() && ryV <20*blockSize())){
+                 if (map(int(ryV/blockSize()),int(rxV/blockSize()))!=0){
+                     break;
+                 }
+                 else{
+                     rxV += dx;
+                     ryV += dy;
+                     dl++;
+                 }
+                 }
+                 else{
+                     break;
+                 }
+             }
+
+             if(qSin(angle)<= -0.01){ //x
+                 ryH = (int(pl->playerPos().y()/blockSize()))*blockSize()-0.001;
+                 rxH = (ryH-pl->playerPos().y())/tan(angle)+pl->playerPos().x();
+                 dy = -blockSize();
+                 dx = dy/tan(angle);
+             }
+             else if(qSin(angle)>= 0.01){
+
+                ryH =  (int(pl->playerPos().y()/blockSize()))*blockSize()+blockSize();
+                rxH = (ryH-pl->playerPos().y())/tan(angle)+pl->playerPos().x();
+                dy = blockSize();
+                dx = dy/tan(angle);
+
+             }
+             else{
+                 ryH =  (int(pl->playerPos().y()/blockSize()))*blockSize()+blockSize();
+                 rxH = (ryH-pl->playerPos().y())/tan(0.01)+pl->playerPos().x();
+                 dy = blockSize();
+                 dx = dy/tan(0.01);
+             }
+
+             while(dl <20){
+                 if((rxH >= blockSize() && rxH <20*blockSize())&&(ryH >=blockSize() && ryH <20*blockSize())){
+                 if (map(int(ryH/blockSize()),int(rxH/blockSize()))!=0){
+                     break;
+                 }
+                 else{
+                     rxH += dx;
+                     ryH += dy;
+                     dl++;
+                 }
+                 }
+                 else{
+                     break;
+                 }
+             }
+              qSqrt((pl->playerPos().x()-rxH)*(pl->playerPos().x()-rxH)+(pl->playerPos().y()-ryH)*(pl->playerPos().y()-ryH))>
+                      qSqrt((pl->playerPos().x()-rxV)*(pl->playerPos().x()-rxV)+(pl->playerPos().y()-ryV)*(pl->playerPos().y()-ryV)) ?
+                         pl->setLine(QLineF(pl->playerPos().x(),pl->playerPos().y(),rxV,ryV), i) :
+                         pl->setLine(QLineF(pl->playerPos().x(),pl->playerPos().y(),rxH,ryH), i);
+              if(((qSin(angle)< -0.01) || (qSin(angle)> 0.01)) && ((qCos(angle)< -0.01) || (qCos(angle)> 0.01))){
+              column_height = viewY*blockSize()/(pl->lineLength(i)*qCos(angle-pl->angle()));
+              }
+              else{
+              }
+              if(column_height > viewY){
+                column_height = viewY;
+              }
+             pl->setBrush(QBrush(QColor(255-512/qPow(column_height,0.5),255-512*2/qPow(column_height,0.5),255-512*2/qPow(column_height,0.5))),i);
+             pl->setRect(QRectF(i,viewY/2-column_height/2,0.1,column_height),i);
+         }
+}
+Map::~Map(){
+        delete pl;
 }

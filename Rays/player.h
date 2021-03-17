@@ -7,16 +7,18 @@
 #include <QEvent>
 #include <QPointF>
 #include <QPainter>
-#include "map.h"
 #include <QtMath>
 #include <QLineF>
 #include <QTime>
-
+#include <QImage>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 
-#define RaySize 2560
+#define viewX 640
+#define viewY 400
+
+
 class Player
 {
     qreal m_dX= 0;
@@ -25,10 +27,11 @@ class Player
     qreal m_dAngle = 0;
     qreal m_angle = 0;
     QPointF m_playerPos;
-    QLineF m_Lines[RaySize];
-    QRectF m_Rects[RaySize];
-    QBrush m_Brush[RaySize];
+    QVector<QLineF> v_lines;
+    QVector<QRectF> v_rects;
+    QVector<QBrush> v_brush;
     QTime watch;
+
 public:
     Player();
     void updatePlayer(QVector<QVector<int>> map);
@@ -40,9 +43,11 @@ public:
     qreal angle();
     qreal step();
     qreal dAngle();
-    QLineF* lines();
-    QRectF* rects();
-    QBrush* brush();
+    QVector<QLineF>& lines();
+    QVector<QRectF>& rects();
+    QVector<QBrush>& brush();
+    qreal lineLength(int i);
+
     void setPlayerX(qreal x);
     void setPlayerY(qreal y);
     void setAngle(qreal angle);

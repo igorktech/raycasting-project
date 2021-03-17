@@ -1,19 +1,19 @@
 #include "player.h"
-#include <QDebug>
 
 Player::Player()
 {
-
-   //m_dX = (qCos(angle())*2);
-   //m_dY = (qSin(angle())*2);
+    v_lines = QVector<QLineF>(viewX);
+     v_rects = QVector<QRectF>(viewX);
+    v_brush = QVector<QBrush>(viewX);
    watch.start();
 }
+    //рисуем игрока и лучи
 void Player::paintPlayer(QPainter & painter){
     painter.setBrush(QBrush(Qt::cyan));
     painter.drawEllipse(m_playerPos,2,2);
-    //painter.setPen();
     painter.setPen(QPen(QBrush(Qt::cyan),2));
-
+    painter.setPen(QPen(QBrush(QColor(0,0,150,90)),0.5));
+    painter.drawLines(lines());
 
 
 }
@@ -50,24 +50,24 @@ void Player::setDX(qreal dx){
 void Player::setDY(qreal dy){
     m_dY = dy;
 }
-QLineF* Player::lines(){
-    return m_Lines;
+QVector<QLineF>& Player::lines(){
+    return v_lines;
 }
 void Player::setLine(QLineF line , int i){
-    m_Lines[i] = line;
+    v_lines[i] = line;
 }
-QRectF* Player::rects(){
-    return m_Rects;
+QVector<QRectF>& Player::rects(){
+    return v_rects;
 }
 void Player::setBrush(QBrush brush , int i){
-    m_Brush[i] = brush;
+    v_brush[i] = brush;
 }
 
-QBrush* Player::brush(){
-    return m_Brush;
+QVector<QBrush>& Player::brush(){
+    return v_brush;
 }
 void Player::setRect(QRectF rect , int i){
-    m_Rects[i] = rect;
+    v_rects[i] = rect;
 }
 void Player::setStep(qreal step){
     m_step = step;
@@ -81,11 +81,9 @@ void Player::setDAngle(qreal dangle){
 qreal Player::dAngle(){
     return m_dAngle;
 }
+    //изменение позиции игрока на поле в зависимости от скорости обновления изображения
 void Player::updatePlayer(QVector<QVector<int>> map){
     int interval = qMax(20, qMin(watch.elapsed(), 250));
-    //qDebug()<<interval;
-    //qDebug()<< watch.elapsed();
-
     watch.start();
     m_angle += m_dAngle * interval / 1000;
      qreal step = m_step * interval / 1000;
@@ -95,4 +93,8 @@ void Player::updatePlayer(QVector<QVector<int>> map){
 
     if (map[(int)(pos.y()/8)][(int)(pos.x()/8)] == 0)
         m_playerPos = m_playerPos + QPointF(dx, dy);
+}
+
+qreal Player::lineLength(int i){
+   return v_lines[i].length();
 }

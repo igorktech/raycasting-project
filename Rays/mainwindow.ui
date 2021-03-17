@@ -6,61 +6,63 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>838</width>
     <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Ray casting</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="1">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="0" column="0" rowspan="2">
-     <widget class="DrawGame" name="widget" native="true">
+     <widget class="DrawGame" name="playerView" native="true">
       <property name="minimumSize">
        <size>
-        <width>512</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="focusPolicy">
-       <enum>Qt::StrongFocus</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="DrawMap" name="widget_2" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>160</width>
-        <height>160</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>160</width>
-        <height>160</height>
+        <width>640</width>
+        <height>400</height>
        </size>
       </property>
       <property name="baseSize">
        <size>
-        <width>160</width>
-        <height>160</height>
+        <width>640</width>
+        <height>400</height>
        </size>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <widget class="DrawMap" name="map" native="true">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>160</width>
+         <height>160</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>160</width>
+         <height>160</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>160</width>
+         <height>160</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>160</width>
+         <height>160</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -70,12 +72,36 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>838</width>
      <height>24</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu_Map">
+    <property name="title">
+     <string>&amp;Map</string>
+    </property>
+    <addaction name="action_Hide"/>
+    <addaction name="action_Show"/>
+   </widget>
+   <addaction name="menu_Map"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_Hide">
+   <property name="text">
+    <string>&amp;Hide</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+H</string>
+   </property>
+  </action>
+  <action name="action_Show">
+   <property name="text">
+    <string>&amp;Show</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+S</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -86,6 +112,7 @@
    <slots>
     <signal>sendFps(QString)</signal>
     <signal>sendRepaintMap(Map*)</signal>
+    <slot>rePaint()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -94,57 +121,77 @@
    <header>drawmap.h</header>
    <container>1</container>
    <slots>
+    <signal>sendRepaint()</signal>
+    <signal>sendFps(QString)</signal>
     <slot>rePaint(Map*)</slot>
+    <slot>setHide()</slot>
+    <slot>setShow()</slot>
    </slots>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
   <connection>
-   <sender>widget</sender>
-   <signal>sendFps(QString)</signal>
-   <receiver>menubar</receiver>
-   <slot>setWindowTitle(QString)</slot>
+   <sender>map</sender>
+   <signal>sendRepaint()</signal>
+   <receiver>playerView</receiver>
+   <slot>repaint()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>140</x>
-     <y>129</y>
+     <x>171</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
-     <x>173</x>
-     <y>12</y>
+     <x>616</x>
+     <y>237</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>widget</sender>
+   <sender>map</sender>
    <signal>sendFps(QString)</signal>
    <receiver>statusbar</receiver>
    <slot>showMessage(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>176</x>
-     <y>504</y>
+     <x>171</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
-     <x>171</x>
-     <y>582</y>
+     <x>735</x>
+     <y>589</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>widget</sender>
-   <signal>sendRepaintMap(Map*)</signal>
-   <receiver>widget_2</receiver>
-   <slot>rePaint(Map*)</slot>
+   <sender>action_Hide</sender>
+   <signal>triggered()</signal>
+   <receiver>map</receiver>
+   <slot>setHide()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>603</x>
-     <y>173</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>667</x>
-     <y>173</y>
+     <x>91</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Show</sender>
+   <signal>triggered()</signal>
+   <receiver>map</receiver>
+   <slot>setShow()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>91</x>
+     <y>115</y>
     </hint>
    </hints>
   </connection>
