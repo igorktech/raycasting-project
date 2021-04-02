@@ -8,11 +8,9 @@ DrawMap::DrawMap(QWidget *parent) : QWidget(parent)
 
 void  DrawMap::paintEvent(QPaintEvent* event){
     QPainter painter(this);
-     if(show){
+
      // если карта не скрыта-выводим карту, игрока, лучи
      mp->paintMap(painter);
-
-     }
 }
 
 DrawMap::~DrawMap(){
@@ -64,19 +62,17 @@ void DrawMap::timerEvent(QTimerEvent*) {
     showFps();
     // посылаем сигнал DrawGame для вывода изображения
     emit sendRepaint();
-    if(show){
         //если карта открыта, изображаем ее
         repaint();
-    }
 }
     //подсчет FPS
 void DrawMap::showFps() {
     static QTime frameTick;
-    static int totalFrame = 0;
+    static int totalFrame = 0; //хранит количество вызовов
     if (!(totalFrame & 31)) {
-        int elapsed = frameTick.elapsed();
-        frameTick.start();
-        int fps = 32 * 1000 / (1 + elapsed);
+        int elapsed = frameTick.elapsed();//получаем колическтво секунд с предыдущего вызова
+        frameTick.start(); //запускаем таймер
+        int fps = 32 * 1000 / (1 + elapsed); //расчет количества кадров в секунду
         emit sendFps(QString("%1 FPS | player position on map: x=%2, y=%3").arg(fps).arg(mp->player()->playerPos().x()).arg(mp->player()->playerPos().y()));
     }
     totalFrame++;

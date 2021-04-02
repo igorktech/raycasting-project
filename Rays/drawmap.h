@@ -20,7 +20,6 @@ class DrawMap : public QWidget
 
     int interval;
     void showFps();
-   bool show = 1;
 public:
     explicit DrawMap(QWidget *parent = nullptr);
     ~DrawMap();
@@ -32,12 +31,6 @@ signals:
     void sendFps(QString);
  void sendRepaint();
 public slots:
- void setHide(){
-     show = false;
- }
- void setShow(){
-     show = true;
- }
 protected:
  //перегруженные методы
  virtual void paintEvent(QPaintEvent* event) override;

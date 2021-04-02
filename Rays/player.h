@@ -10,7 +10,6 @@
 #include <QtMath>
 #include <QLineF>
 #include <QTime>
-#include <QImage>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -21,8 +20,7 @@
 
 class Player
 {
-    qreal m_dX= 0;
-    qreal m_dY= 0;
+
     qreal m_step = 0;
     qreal m_dAngle = 0;
     qreal m_angle = 0;
@@ -38,8 +36,6 @@ public:
     void paintPlayer(QPainter & painter);
     void setPlayerPos(QPointF playerPos);
     QPointF playerPos();
-    qreal dX();
-    qreal dY();
     qreal angle();
     qreal step();
     qreal dAngle();
@@ -51,8 +47,6 @@ public:
     void setPlayerX(qreal x);
     void setPlayerY(qreal y);
     void setAngle(qreal angle);
-    void setDX(qreal dx);
-    void setDY(qreal dy);
     void setLine(QLineF line , int i);
     void setBrush(QBrush brush , int i);
     void setRect(QRectF rect , int i);

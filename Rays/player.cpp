@@ -25,12 +25,7 @@ QPointF Player::playerPos() {
     return m_playerPos;
 }
 
-qreal Player::dX(){
-    return m_dX;
-}
-qreal Player::dY(){
-    return m_dY;
-}
+
 
 void Player::setPlayerX(qreal x){
     m_playerPos.setX(x);
@@ -44,12 +39,7 @@ qreal Player::angle(){
 void Player::setAngle(qreal angle){
     m_angle = angle;
 }
-void Player::setDX(qreal dx){
-    m_dX = dx;
-}
-void Player::setDY(qreal dy){
-    m_dY = dy;
-}
+
 QVector<QLineF>& Player::lines(){
     return v_lines;
 }
@@ -85,14 +75,14 @@ qreal Player::dAngle(){
 void Player::updatePlayer(QVector<QVector<int>> map){
     int interval = qMax(20, qMin(watch.elapsed(), 250));
     watch.start();
-    m_angle += m_dAngle * interval / 1000;
-     qreal step = m_step * interval / 1000;
-    qreal dx = cos(m_angle) * step;
-    qreal dy = sin(m_angle) * step;
-    QPointF pos = m_playerPos + 2 * QPointF(dx, dy);
+    m_angle += m_dAngle * interval / 1000; // в зависимости от количества прошедшего времени изменяем угол поворота
+     qreal step = m_step * interval / 1000; // в зависимости от количества прошедшего времени изменяем шаг
+    qreal dx = cos(m_angle) * step; //находим составляющую по  x длины перемещения
+    qreal dy = sin(m_angle) * step;  //находим составляющую по  y длины перемещения
+    QPointF pos = m_playerPos + 2*QPointF(dx, dy); // изменяем координаты игрока
 
     if (map[(int)(pos.y()/8)][(int)(pos.x()/8)] == 0)
-        m_playerPos = m_playerPos + QPointF(dx, dy);
+        m_playerPos = pos; // если игрок не наступит на ячейку с препятствием - присваиваем новое значение
 }
 
 qreal Player::lineLength(int i){

@@ -167,7 +167,7 @@
    <sender>action_Hide</sender>
    <signal>triggered()</signal>
    <receiver>map</receiver>
-   <slot>setHide()</slot>
+   <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -183,7 +183,7 @@
    <sender>action_Show</sender>
    <signal>triggered()</signal>
    <receiver>map</receiver>
-   <slot>setShow()</slot>
+   <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
