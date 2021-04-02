@@ -44,7 +44,7 @@ public:
 
     Map();
     ~Map();
-   void Rays();
+   void Rays(); //Использует алгоритм DDA
     Player* player(){
         return pl;
     }
