@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>838</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ray casting</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" rowspan="2">
+     <widget class="DrawGame" name="playerView" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>640</width>
+        <height>400</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>640</width>
+        <height>400</height>
+       </size>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <widget class="DrawMap" name="map" native="true">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>160</width>
+         <height>160</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>160</width>
+         <height>160</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>160</width>
+         <height>160</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>160</width>
+         <height>160</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>838</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Map">
+    <property name="title">
+     <string>&amp;Map</string>
+    </property>
+    <addaction name="action_Hide"/>
+    <addaction name="action_Show"/>
+   </widget>
+   <addaction name="menu_Map"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action_Hide">
+   <property name="text">
+    <string>&amp;Hide</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+H</string>
+   </property>
+  </action>
+  <action name="action_Show">
+   <property name="text">
+    <string>&amp;Show</string>
+   </property>
+   <property name="shortcut">
+    <string>Meta+S</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DrawGame</class>
+   <extends>QWidget</extends>
+   <header>drawgame.h</header>
+   <container>1</container>
+   <slots>
+    <signal>sendFps(QString)</signal>
+    <signal>sendRepaintMap(Map*)</signal>
+    <slot>rePaint()</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>DrawMap</class>
+   <extends>QWidget</extends>
+   <header>drawmap.h</header>
+   <container>1</container>
+   <slots>
+    <signal>sendRepaint()</signal>
+    <signal>sendFps(QString)</signal>
+    <slot>rePaint(Map*)</slot>
+    <slot>setHide()</slot>
+    <slot>setShow()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>map</sender>
+   <signal>sendRepaint()</signal>
+   <receiver>playerView</receiver>
+   <slot>repaint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>616</x>
+     <y>237</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>map</sender>
+   <signal>sendFps(QString)</signal>
+   <receiver>statusbar</receiver>
+   <slot>showMessage(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>195</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>735</x>
+     <y>589</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Hide</sender>
+   <signal>triggered()</signal>
+   <receiver>map</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>91</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Show</sender>
+   <signal>triggered()</signal>
+   <receiver>map</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>91</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
